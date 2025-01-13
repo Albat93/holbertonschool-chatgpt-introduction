@@ -12,12 +12,13 @@ class Minesweeper:
         self.mines = set(random.sample(range(width * height), mines))
         self.field = [[' ' for _ in range(width)] for _ in range(height)]
         self.revealed = [[False for _ in range(width)] for _ in range(height)]
+        self.non_mine_cells = width * height - mines  # Track non-mine cells
 
     def print_board(self, reveal=False):
         clear_screen()
         print('  ' + ' '.join(str(i) for i in range(self.width)))
         for y in range(self.height):
-            print(f'{y:2}', end=' ')  # Alignement correct des indices de ligne
+            print(y, end=' ')
             for x in range(self.width):
                 if reveal or self.revealed[y][x]:
                     if (y * self.width + x) in self.mines:
@@ -51,18 +52,23 @@ class Minesweeper:
                         self.reveal(nx, ny)
         return True
 
+    def check_win(self):
+        revealed_cells = sum(sum(row) for row in self.revealed)
+        return revealed_cells == self.non_mine_cells
+
     def play(self):
         while True:
             self.print_board()
             try:
                 x = int(input("Enter x coordinate: "))
                 y = int(input("Enter y coordinate: "))
-                if x < 0 or x >= self.width or y < 0 or y >= self.height:
-                    print("Coordinates out of bounds. Try again.")
-                    continue
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")
+                    break
+                if self.check_win():   # Fixed indentation
+                    self.print_board(reveal=True)
+                    print("Congratulations! You've won the game.")
                     break
             except ValueError:
                 print("Invalid input. Please enter numbers only.")

@@ -88,6 +88,8 @@ def tic_tac_toe():
             player = "O" if player == "X" else "X"
         except ValueError:
             print("Invalid input! Please enter numbers only. Try again.")
+        except IndexError:
+            print("Invalid input! Row and column must be between 0 and 2. Try again.")
 
-# Start the game
+# Test the game by starting it
 tic_tac_toe()

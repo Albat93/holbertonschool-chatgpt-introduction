@@ -1,44 +1,40 @@
-#!/usr/bin/python3
-class Checkbook:
-def __init__(self):
-self.balance = 0.0
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Change Background Color</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding-top: 50px;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
 
-def deposit(self, amount):
-if amount <= 0: print("Invalid deposit amount. Please enter a positive number.") return self.balance +=amount
-	print("Deposited ${:.2f}".format(amount)) print("Current Balance: ${:.2f}".format(self.balance)) def withdraw(self,
-	amount): if amount <=0: print("Invalid withdrawal amount. Please enter a positive number.") return if amount>
-	self.balance:
-	print("Insufficient funds to complete the withdrawal.")
-	else:
-	self.balance -= amount
-	print("Withdrew ${:.2f}".format(amount))
-	print("Current Balance: ${:.2f}".format(self.balance))
+<h2>Click the button to change the background color</h2>
 
-	def get_balance(self):
-	print("Current Balance: ${:.2f}".format(self.balance))
+<button id="colorButton">Change Color</button> <!-- Corrected id -->
 
-	def main():
-	cb = Checkbook()
-	while True:
-	action = input("What would you like to do? (deposit, withdraw, balance, exit): ")
-	if action.lower() == 'exit':
-	break
-	elif action.lower() == 'deposit':
-	try:
-	amount = float(input("Enter the amount to deposit: $"))
-	cb.deposit(amount)
-	except ValueError:
-	print("Invalid input. Please enter a numeric value.")
-	elif action.lower() == 'withdraw':
-	try:
-	amount = float(input("Enter the amount to withdraw: $"))
-	cb.withdraw(amount)
-	except ValueError:
-	print("Invalid input. Please enter a numeric value.")
-	elif action.lower() == 'balance':
-	cb.get_balance()
-	else:
-	print("Invalid command. Please try again.")
+<script>
+    document.getElementById("colorButton").addEventListener("click", function() {
+        changeBackgroundColor();
+    });
 
-	if __name__ == "__main__":
-	main()
+    function changeBackgroundColor() {
+        // Generate a random color
+        var randomColor = "#" + Math.floor(Math.random()*16777215).toString(16);
+        // Change the background color of the body
+        document.body.style.backgroundColor = randomColor;
+    }
+</script>
+
+</body>
+</html>

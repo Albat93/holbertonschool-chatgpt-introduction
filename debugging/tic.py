@@ -44,10 +44,7 @@ def is_full(board):
     Returns:
     bool: True if the board is full, False otherwise.
     """
-    for row in board:
-        if " " in row:
-            return False
-    return True
+    return all(" " not in row for row in board)
 
 def tic_tac_toe():
     """
@@ -81,7 +78,7 @@ def tic_tac_toe():
                 print(f"Player {player} wins!")
                 break
 
-            # Check if the board is full
+            # Check if the board is full (draw check)
             if is_full(board):
                 print_board(board)
                 print("It's a draw!")
@@ -91,8 +88,6 @@ def tic_tac_toe():
             player = "O" if player == "X" else "X"
         except ValueError:
             print("Invalid input! Please enter numbers only. Try again.")
-        except IndexError:
-            print("Invalid input! Row and column must be between 0 and 2. Try again.")
 
 # Start the game
 tic_tac_toe()

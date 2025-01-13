@@ -12,14 +12,12 @@ class Minesweeper:
         self.mines = set(random.sample(range(width * height), mines))
         self.field = [[' ' for _ in range(width)] for _ in range(height)]
         self.revealed = [[False for _ in range(width)] for _ in range(height)]
-        self.total_cells = width * height
-        self.revealed_count = 0  # Track the number of revealed cells
 
     def print_board(self, reveal=False):
         clear_screen()
         print('  ' + ' '.join(str(i) for i in range(self.width)))
         for y in range(self.height):
-            print(y, end=' ')
+            print(f'{y:2}', end=' ')  # Alignement correct des indices de ligne
             for x in range(self.width):
                 if reveal or self.revealed[y][x]:
                     if (y * self.width + x) in self.mines:
@@ -42,15 +40,9 @@ class Minesweeper:
         return count
 
     def reveal(self, x, y):
-        if self.revealed[y][x]:  # Avoid re-revealing cells
-            return True
-
         if (y * self.width + x) in self.mines:
             return False
-
         self.revealed[y][x] = True
-        self.revealed_count += 1  # Increment the revealed cell count
-
         if self.count_mines_nearby(x, y) == 0:
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:
@@ -59,19 +51,15 @@ class Minesweeper:
                         self.reveal(nx, ny)
         return True
 
-    def is_win(self):
-        # Check if the number of revealed cells matches the total non-mine cells
-        return self.revealed_count == self.total_cells - len(self.mines)
-
     def play(self):
         while True:
             self.print_board()
-            if self.is_win():
-                print("Congratulations! You've revealed all non-mine cells. You win!")
-                break
             try:
                 x = int(input("Enter x coordinate: "))
                 y = int(input("Enter y coordinate: "))
+                if x < 0 or x >= self.width or y < 0 or y >= self.height:
+                    print("Coordinates out of bounds. Try again.")
+                    continue
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")

@@ -12,7 +12,8 @@ class Minesweeper:
         self.mines = set(random.sample(range(width * height), mines))
         self.field = [[' ' for _ in range(width)] for _ in range(height)]
         self.revealed = [[False for _ in range(width)] for _ in range(height)]
-        self.non_mine_cells = width * height - mines  # Track non-mine cells
+        self.total_cells = width * height
+        self.revealed_count = 0
 
     def print_board(self, reveal=False):
         clear_screen()
@@ -43,7 +44,11 @@ class Minesweeper:
     def reveal(self, x, y):
         if (y * self.width + x) in self.mines:
             return False
-        self.revealed[y][x] = True
+
+        if not self.revealed[y][x]:  # Only count if the cell was not previously revealed
+            self.revealed[y][x] = True
+            self.revealed_count += 1
+
         if self.count_mines_nearby(x, y) == 0:
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:
@@ -53,22 +58,21 @@ class Minesweeper:
         return True
 
     def check_win(self):
-        revealed_cells = sum(sum(row) for row in self.revealed)
-        return revealed_cells == self.non_mine_cells
+        # Total non-mine cells = total cells - number of mines
+        return self.revealed_count == self.total_cells - len(self.mines)
 
     def play(self):
         while True:
             self.print_board()
+            if self.check_win():
+                print("Congratulations! You've revealed all non-mine cells. You win!")
+                break
             try:
                 x = int(input("Enter x coordinate: "))
                 y = int(input("Enter y coordinate: "))
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")
-                    break
-                if self.check_win():   # Fixed indentation
-                    self.print_board(reveal=True)
-                    print("Congratulations! You've won the game.")
                     break
             except ValueError:
                 print("Invalid input. Please enter numbers only.")
